@@ -78,7 +78,7 @@ workflows:
     integrations:
       app_store_connect: bloop-app-store
     environment:
-      xcode: latest
+      xcode: 26.5
       node: 22
       vars:
         BLOOP_BUNDLE_ID: com.bloop.dreamgardens
@@ -86,13 +86,17 @@ workflows:
         distribution_type: app_store
         bundle_identifier: com.bloop.dreamgardens
     scripts:
+      - name: Restore project folders from uploaded archive if needed
+        script: *restore_project
       - name: Prepare versioned game
         script: |
+          set -e
           export BLOOP_BUILD_NUMBER=$(( ${BUILD_NUMBER:-0} + 1 ))
           npm run prepare:mobile
           npm test
       - name: Generate Xcode project
         script: |
+          set -e
           command -v xcodegen >/dev/null 2>&1 || brew install xcodegen
           cd ios
           xcodegen generate --spec project.json
