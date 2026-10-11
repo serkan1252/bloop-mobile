@@ -1,27 +1,25 @@
-BLOOP mobil paket doğrulama durumu — 11 Ekim 2026
+BLOOP mobil doğrulama — 11 Ekim 2026
 
-GEÇEN KONTROLLER
-- Dört otomatik Node.js testi geçti; başarısız test yok.
-- Özgün ve mobil HTML içindeki tüm JavaScript blokları sözdizimi kontrolünden geçti.
-- Android ve iOS için üretilen HTML dosyaları aynı.
-- Oyun kaynağında harici dosya indirme veya ağ isteği bulunmadı.
-- Mobil beta kopyasında mağaza/reklam geçidi her bölümde kapalı.
-- 200 bölümün her biri için sabit rastgelelik tohumu ile başlangıç tahtası,
-  geçerli hamle ve ilk hamlenin eşleşme/yerçekimi işlemleri kontrol edildi.
-  Bu kontrol tüm bölümlerin baştan sona oynanıp bitirildiği anlamına gelmez.
-- web/BLOOP.html, verilen özgün dosyayla byte düzeyinde aynı.
-- Metinler UTF-8; JSON, Android XML ve Apple plist dosyaları ayrıştırıldı.
-- iOS uygulama simgesi 1024 x 1024 RGB; alfa kanalı yok.
-- Gradle 8.13 wrapper JAR özeti resmi Gradle yayımlama özetiyle eşleşti.
-- codemagic.yaml ayrıştırıldı ve resmi Codemagic JSON şemasına göre üç akış da geçerli.
-  Şema: https://codemagic.io/codemagic-schema.json
+TAMAMLANANLAR
+- Android android-beta: Codemagic derlemesi başarılı; debug APK indirildi.
+- Kullanıcı Android emülatöründe oyunun açıldığını ve oynandığını doğruladı.
+- iOS ios-validation: Xcode 26.5 ile imzasız simülatör derlemesi başarılı.
+- Sekiz yerel otomatik test geçti. 200 bölümün başlangıç tahtaları ve ilk geçerli hamlesi kontrol edildi.
+- Yeni kayıt testleri: yarım turu geri yükleme, bölüm/yıldız kaydı, bozuk kayıt, kayıt alanı hatası, alıştırmanın kayıt koruması ve tamamlanan turun temizlenmesi.
+- Özgün web/BLOOP.html değişmedi; Android/iOS mobil HTML dosyaları aynı.
+- Yerel codemagic.yaml GitHub ile eşitlendi; Android ve iOS doğrulama akışları Xcode 26.5 kullanır.
+- GitHub'a yüklenen ZIP içindeki klasörler derleme sırasında güvenli şekilde açılır; kökteki güncel YAML korunur.
 
-HENÜZ YAPILMAYANLAR
-- Android APK derlemesi: Bu çalışma ortamında JDK/Android SDK kurulumu bulunamadı.
-- iOS derlemesi: Windows ortamında Xcode yok; Codemagic Mac makinesinde yapılacak.
-- Gerçek Android/iPhone cihazında görüntü, dokunma, ses ve kayıt kalıcılığı testi.
-- GitHub'a yükleme, Codemagic derlemesi başlatma, Apple imzalama ve TestFlight yükleme.
+DERLEME KANITLARI
+Android: https://codemagic.io/app/6acb81969bccaf909772c488/build/6acb915a546ce6236ced8295
+ iOS: https://codemagic.io/app/6acb81969bccaf909772c488/build/6acb8d62546ce6236ced81a2
 
-Bu arşiv kaynak proje paketidir; içinde derlenmiş APK veya IPA yoktur.
-İlk gerçek derleme için BASLA.txt içindeki android-beta veya ios-validation
-akışını kullan. İmzalama hesabı hazır olmadan ios-testflight akışını başlatma.
+KALAN CİHAZ KONTROLÜ
+1. Bir bölümü geç ve sonraki bölümde birkaç hamle yap.
+2. Oyunu tamamen kapatıp yeniden aç; bölüm, yıldız ve yarım tur korunmalı.
+3. Ses aç/kapat ve Android geri düğmesini dene.
+Gerçek Android/iPhone cihaz testi henüz yapılmadı. iOS simülatör paketi Windows'ta ve gerçek iPhone'da çalışmaz.
+
+SONRAKİ AŞAMA
+TestFlight/mağaza yayını ilk kapsamın dışında tutuldu. Apple hesabı/imzalama, Google Play yayın anahtarı ve AAB, mağaza görselleri ve gerçek cihaz kontrolleri bu aşamada tamamlanacak.
+Kaynak ZIP, derlenmiş Android APK ve iOS simülatör ZIP'i ayrı teslim dosyalarıdır.

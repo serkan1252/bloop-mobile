@@ -62,7 +62,7 @@ BU BETANIN KAPSAMI
 - Çevrimdışı oyun; sunucu veya harici indirme yok.
 - İlerleme uygulamanın kendi yerel WebView alanında tutulur.
 - Tarayıcıda önceden kaydedilen ilerleme yeni uygulamaya otomatik taşınmaz.
-- Tamamlanan bölümler saklanır; yarım kalan bölüm yeniden başlar (mevcut oyunun davranışı).
+- Tamamlanan bölümler ve yarım kalan tur cihazda saklanır; yeniden açılışta geri yüklenir.
 - Uygulamayı silmek/uygulama verisini temizlemek ilerlemeyi silebilir. Bulut kayıt yok.
 - Demo mağaza, abonelik ve ödüllü reklam girişleri tüm bölümlerde kapalıdır.
 - Android 8+ ve iOS 15+ hedeflenmiştir; son cihaz testi ayrıca yapılmalıdır.
@@ -80,3 +80,4 @@ https://github.com/yonaskolb/XcodeGen
 GERÇEKLEŞEN DOĞRULAMALAR
 Güncel doğrulama durumu DOGRULAMA.txt içindedir. Yerel bir kontrolün geçmesi
 Android/iOS derlemesinin veya gerçek cihaz testinin geçtiği anlamına gelmez.
+

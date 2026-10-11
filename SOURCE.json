@@ -6,5 +6,5 @@
   "sourceUnmodified": true,
   "mobileChanges": "Commerce demos disabled in generated mobile HTML only",
   "validationDateUtc": "2026-10-11",
-  "nativeBuildStatus": "Not run; Android SDK/JDK and Xcode not available in this environment"
+  "nativeBuildStatus": "Codemagic android-beta APK and ios-validation unsigned simulator build succeeded; Android emulator gameplay confirmed by user"
 }
