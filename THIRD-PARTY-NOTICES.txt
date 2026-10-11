@@ -1,0 +1,13 @@
+Gradle Wrapper 8.13
+The files android/gradlew, android/gradlew.bat and
+android/gradle/wrapper/gradle-wrapper.jar are from the official Gradle repository:
+https://github.com/gradle/gradle/tree/v8.13.0
+Copyright the original Gradle authors; Apache License 2.0.
+License: android/gradle/GRADLE-LICENSE.txt
+
+Android Gradle Plugin and AndroidX WebKit are downloaded by Gradle at build time.
+Their respective licenses apply. No third-party runtime JavaScript libraries
+were added to the game in this package.
+
+The original BLOOP game is included as user-provided source. This package does
+not grant any additional license to that game or its artwork.

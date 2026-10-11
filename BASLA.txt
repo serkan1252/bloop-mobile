@@ -1,0 +1,82 @@
+BLOOP - Android ve iPhone mobil beta projesi
+
+Bu paket mevcut HTML oyununun mobil uygulama kabuklarını içerir.
+Tek oyun kaynağı: web/BLOOP.html. F: sürücüsündeki asıl dosya değiştirilmedi.
+Kaynak HTML'nin SHA-256 özeti SOURCE.json içindedir.
+
+İLK ADIM: GITHUB
+1. GitHub'da bloop-mobile adlı PRIVATE bir depo oluştur.
+2. Bu klasörün içindeki dosyaları, klasör yapısını koruyarak depoya yükle.
+   codemagic.yaml doğrudan depo kökünde olmalı; BLOOP-Mobile adlı ikinci bir
+   üst klasörün altında kalmamalı. Gizli .gitignore ve .gitattributes dosyalarını da ekle.
+3. Codemagic GitHub App ayarından yalnızca bu depoya erişim ver.
+4. Codemagic'te listeyi yenile ve bloop-mobile deposunu seç.
+   Proje türünde Native iOS / iOS veya diğer YAML tabanlı proje seçeneğini kullan.
+
+İLK DERLEMELER
+- android-beta: Test telefona kurulabilen DEBUG APK üretir. Google Play yayın dosyası değildir.
+- ios-validation: Apple üyeliği olmadan iOS derleme kontrolü yapar ve simülatör paketi üretir.
+  Bu paket gerçek iPhone'a kurulamaz. Bu projede gerçek iPhone testi için
+  ios-testflight akışı hazırlandı.
+- ios-testflight: Apple hesabı ve imzalama ayarları tamamlandıktan sonra elle başlatılır.
+  App Store incelemesine otomatik göndermez. TestFlight'a yükleme yapar.
+Hiçbir akış push ile otomatik başlamaz; Codemagic'te elle seçip çalıştır.
+
+APPLE / TESTFLIGHT HAZIRLIĞI
+1. Aktif Apple Developer üyeliği gerekir.
+2. Uygulama kimliğini belirle. Başlangıç değeri com.bloop.dreamgardens'tir;
+   Apple hesabındaki App ID ile eşleşmeli. Değiştirirsen app.config.json ve
+   codemagic.yaml içindeki BLOOP_BUNDLE_ID / bundle_identifier değerlerini birlikte güncelle.
+3. App Store Connect'te aynı kimlikle BLOOP kaydını oluştur.
+4. Codemagic Team integrations > Developer Portal bölümünde App Store Connect
+   API anahtarını 'bloop-app-store' adıyla ekle. Anahtarları GitHub'a koyma.
+5. Code signing identities bölümüne eşleşen Apple Distribution sertifikası ve
+   App Store provisioning profile ekle/oluştur. Sertifika özel anahtarı da gerekir.
+6. ios-testflight akışını başlat. Paket Apple'da işlendikten sonra TestFlight test grubuna ekle.
+   Harici test grubu için Apple beta incelemesi gerekebilir.
+7. İlk sürümden sonra her yüklemede build numarasını artır. Akış Codemagic BUILD_NUMBER + 1
+   kullanır. Başka yerde daha yüksek bir numara kullanıldıysa buna göre düzenle.
+
+YEREL ÖNİZLEME (Node.js 22 veya üstü)
+Proje klasöründe terminal aç:
+  npm run preview
+Ardından http://127.0.0.1:4173 adresini aç. Ctrl+C sunucuyu durdurur.
+
+YEREL ANDROID DERLEME
+Node.js 22+, JDK 17, Android SDK Platform 36 ve Android Build Tools gerekir.
+Android Studio bu araçları kurabilir; sdk.dir bilgisayarına özel local.properties
+dosyasında veya ANDROID_HOME ortam değişkeninde ayarlanabilir.
+  npm run prepare:mobile
+  npm test
+  cd android
+  .\gradlew.bat assembleDebug
+APK: android/app/build/outputs/apk/debug/app-debug.apk
+
+GÜNCELLEME
+Oyunun yeni tek dosyalık HTML sürümünü web/BLOOP.html üzerine koy.
+Kaynak yapısı değişmişse scripts/prepare.mjs betik içindeki beta mağaza kapatma
+kontrolleri açıklayıcı hata verir; bu kontrolü kaldırmadan yeni yapıya uyarlamak gerekir.
+Her iki mobil uygulama aynı HTML'den üretilir.
+
+BU BETANIN KAPSAMI
+- Çevrimdışı oyun; sunucu veya harici indirme yok.
+- İlerleme uygulamanın kendi yerel WebView alanında tutulur.
+- Tarayıcıda önceden kaydedilen ilerleme yeni uygulamaya otomatik taşınmaz.
+- Tamamlanan bölümler saklanır; yarım kalan bölüm yeniden başlar (mevcut oyunun davranışı).
+- Uygulamayı silmek/uygulama verisini temizlemek ilerlemeyi silebilir. Bulut kayıt yok.
+- Demo mağaza, abonelik ve ödüllü reklam girişleri tüm bölümlerde kapalıdır.
+- Android 8+ ve iOS 15+ hedeflenmiştir; son cihaz testi ayrıca yapılmalıdır.
+- BLOOP harfini kullanan geçici uygulama simgesi var; mağaza görselleri ayrıca hazırlanabilir.
+- iOS projesi Codemagic'te XcodeGen ile üretilir. Yerel Mac şart değildir.
+- Android Play Store sürümü için yayın anahtarıyla imzalı AAB hazırlığı ayrıca gerekir.
+- Mağaza açıklaması, ekran görüntüleri ve gerçek cihaz testleri yayın öncesi tamamlanmalıdır.
+
+TEKNİK KAYNAKLAR
+https://docs.codemagic.io/yaml-quick-start/building-a-native-ios-app/
+https://docs.codemagic.io/yaml-quick-start/building-a-native-android-app/
+https://developer.android.com/develop/ui/views/layout/webapps/load-local-content
+https://github.com/yonaskolb/XcodeGen
+
+GERÇEKLEŞEN DOĞRULAMALAR
+Güncel doğrulama durumu DOGRULAMA.txt içindedir. Yerel bir kontrolün geçmesi
+Android/iOS derlemesinin veya gerçek cihaz testinin geçtiği anlamına gelmez.

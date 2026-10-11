@@ -1,0 +1,12 @@
+{
+  "name": "bloop-mobile",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BLOOP offline mobile beta: Java WebView and Swift WKWebView",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "prepare:mobile": "node scripts/prepare.mjs",
+    "test": "node --test tests/package.test.mjs",
+    "preview": "node scripts/preview.mjs"
+  }
+}

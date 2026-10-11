@@ -1,0 +1,27 @@
+BLOOP mobil paket doğrulama durumu — 11 Ekim 2026
+
+GEÇEN KONTROLLER
+- Dört otomatik Node.js testi geçti; başarısız test yok.
+- Özgün ve mobil HTML içindeki tüm JavaScript blokları sözdizimi kontrolünden geçti.
+- Android ve iOS için üretilen HTML dosyaları aynı.
+- Oyun kaynağında harici dosya indirme veya ağ isteği bulunmadı.
+- Mobil beta kopyasında mağaza/reklam geçidi her bölümde kapalı.
+- 200 bölümün her biri için sabit rastgelelik tohumu ile başlangıç tahtası,
+  geçerli hamle ve ilk hamlenin eşleşme/yerçekimi işlemleri kontrol edildi.
+  Bu kontrol tüm bölümlerin baştan sona oynanıp bitirildiği anlamına gelmez.
+- web/BLOOP.html, verilen özgün dosyayla byte düzeyinde aynı.
+- Metinler UTF-8; JSON, Android XML ve Apple plist dosyaları ayrıştırıldı.
+- iOS uygulama simgesi 1024 x 1024 RGB; alfa kanalı yok.
+- Gradle 8.13 wrapper JAR özeti resmi Gradle yayımlama özetiyle eşleşti.
+- codemagic.yaml ayrıştırıldı ve resmi Codemagic JSON şemasına göre üç akış da geçerli.
+  Şema: https://codemagic.io/codemagic-schema.json
+
+HENÜZ YAPILMAYANLAR
+- Android APK derlemesi: Bu çalışma ortamında JDK/Android SDK kurulumu bulunamadı.
+- iOS derlemesi: Windows ortamında Xcode yok; Codemagic Mac makinesinde yapılacak.
+- Gerçek Android/iPhone cihazında görüntü, dokunma, ses ve kayıt kalıcılığı testi.
+- GitHub'a yükleme, Codemagic derlemesi başlatma, Apple imzalama ve TestFlight yükleme.
+
+Bu arşiv kaynak proje paketidir; içinde derlenmiş APK veya IPA yoktur.
+İlk gerçek derleme için BASLA.txt içindeki android-beta veya ios-validation
+akışını kullan. İmzalama hesabı hazır olmadan ios-testflight akışını başlatma.

@@ -1,0 +1,31 @@
+import groovy.json.JsonSlurper
+
+plugins { id 'com.android.application' }
+
+def bloopConfig = new JsonSlurper().parse(rootProject.file('../app.config.json'))
+def buildNo = System.getenv('BLOOP_BUILD_NUMBER') ?: bloopConfig.buildNumber.toString()
+android {
+    namespace 'com.bloop.dreamgardens'
+    compileSdk 36
+    defaultConfig {
+        applicationId System.getenv('BLOOP_BUNDLE_ID') ?: bloopConfig.bundleId
+        minSdk 26
+        targetSdk 36
+        versionCode Integer.parseInt(buildNo)
+        versionName bloopConfig.version
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    buildTypes { release { minifyEnabled false } }
+}
+dependencies { implementation 'androidx.webkit:webkit:1.14.0' }
+
+tasks.named('preBuild') {
+    doFirst {
+        if (!file('src/main/assets/game/index.html').exists()) {
+            throw new GradleException('Önce proje kökünde npm run prepare:mobile çalıştırın.')
+        }
+    }
+}

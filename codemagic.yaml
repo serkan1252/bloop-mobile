@@ -1,0 +1,87 @@
+workflows:
+  android-beta:
+    name: BLOOP - Android APK beta
+    instance_type: mac_mini_m2
+    max_build_duration: 30
+    environment:
+      java: 17
+      node: 22
+    scripts:
+      - name: Prepare and verify the offline game
+        script: |
+          npm run prepare:mobile
+          npm test
+      - name: Build debug APK
+        script: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+    artifacts:
+      - android/app/build/outputs/apk/debug/*.apk
+      - android/app/build/reports/**
+
+  ios-validation:
+    name: BLOOP - iOS build check (no Apple account)
+    instance_type: mac_mini_m2
+    max_build_duration: 30
+    environment:
+      xcode: latest
+      node: 22
+    scripts:
+      - name: Prepare and verify the offline game
+        script: |
+          npm run prepare:mobile
+          npm test
+      - name: Generate Xcode project
+        script: |
+          command -v xcodegen >/dev/null 2>&1 || brew install xcodegen
+          cd ios
+          xcodegen generate --spec project.json
+      - name: Build for iOS Simulator
+        script: |
+          set -o pipefail
+          xcodebuild -project ios/BLOOP.xcodeproj -scheme BLOOP -configuration Debug \
+            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build/ios CODE_SIGNING_ALLOWED=NO build 2>&1 | tee ios-build.log
+          ditto -c -k --keepParent build/ios/Build/Products/Debug-iphonesimulator/BLOOP.app BLOOP-Simulator.zip
+    artifacts:
+      - BLOOP-Simulator.zip
+      - ios-build.log
+
+  ios-testflight:
+    name: BLOOP - TestFlight (Apple setup required)
+    instance_type: mac_mini_m2
+    max_build_duration: 40
+    integrations:
+      app_store_connect: bloop-app-store
+    environment:
+      xcode: latest
+      node: 22
+      vars:
+        BLOOP_BUNDLE_ID: com.bloop.dreamgardens
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.bloop.dreamgardens
+    scripts:
+      - name: Prepare versioned game
+        script: |
+          export BLOOP_BUILD_NUMBER=$(( ${BUILD_NUMBER:-0} + 1 ))
+          npm run prepare:mobile
+          npm test
+      - name: Generate Xcode project
+        script: |
+          command -v xcodegen >/dev/null 2>&1 || brew install xcodegen
+          cd ios
+          xcodegen generate --spec project.json
+      - name: Apply distribution signing
+        script: xcode-project use-profiles
+      - name: Build signed IPA
+        script: xcode-project build-ipa --project ios/BLOOP.xcodeproj --scheme BLOOP
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        submit_to_app_store: false

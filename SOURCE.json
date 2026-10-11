@@ -1,0 +1,10 @@
+{
+  "originalFileName": "BLOOP.html",
+  "sourcePathInPackage": "web/BLOOP.html",
+  "sourceBytes": 104068,
+  "sourceSha256": "dd1b0dde08683a62ee65898b1c251375d0fdf406d63fc969d26cf9ad5d5f8f98",
+  "sourceUnmodified": true,
+  "mobileChanges": "Commerce demos disabled in generated mobile HTML only",
+  "validationDateUtc": "2026-10-11",
+  "nativeBuildStatus": "Not run; Android SDK/JDK and Xcode not available in this environment"
+}
