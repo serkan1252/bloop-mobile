@@ -7,12 +7,30 @@ workflows:
       java: 17
       node: 22
     scripts:
+      - name: Restore project folders from uploaded archive if needed
+        script: &restore_project |
+          set -e
+          if [ ! -f scripts/prepare.mjs ]; then
+            test -f BLOOP-Mobile.zip
+            archive_dir=$(mktemp -d)
+            unzip -q BLOOP-Mobile.zip -d "$archive_dir"
+            for folder in android ios scripts tests web; do
+              test -d "$archive_dir/BLOOP-Mobile/$folder"
+              test ! -e "$folder"
+              cp -R "$archive_dir/BLOOP-Mobile/$folder" "$folder"
+            done
+          fi
+          test -f android/app/build.gradle
+          test -f ios/project.json
+          test -f web/BLOOP.html
       - name: Prepare and verify the offline game
         script: |
+          set -e
           npm run prepare:mobile
           npm test
       - name: Build debug APK
         script: |
+          set -e
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon
@@ -28,18 +46,22 @@ workflows:
       xcode: latest
       node: 22
     scripts:
+      - name: Restore project folders from uploaded archive if needed
+        script: *restore_project
       - name: Prepare and verify the offline game
         script: |
+          set -e
           npm run prepare:mobile
           npm test
       - name: Generate Xcode project
         script: |
+          set -e
           command -v xcodegen >/dev/null 2>&1 || brew install xcodegen
           cd ios
           xcodegen generate --spec project.json
       - name: Build for iOS Simulator
         script: |
-          set -o pipefail
+          set -eo pipefail
           xcodebuild -project ios/BLOOP.xcodeproj -scheme BLOOP -configuration Debug \
             -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
             -derivedDataPath build/ios CODE_SIGNING_ALLOWED=NO build 2>&1 | tee ios-build.log
